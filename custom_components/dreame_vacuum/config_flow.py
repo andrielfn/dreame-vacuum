@@ -685,6 +685,10 @@ class DreameVacuumFlowHandler(ConfigFlow, domain=DOMAIN):
         if self.models is None:
             self.models = {}
             device_info = json.loads(zlib.decompress(base64.b64decode(DEVICE_INFO), zlib.MAX_WBITS | 32))
+            # Alias unlisted X50 SKU variants to known-equivalent entries
+            for alias, source in {"r9446j": "r9446k"}.items():
+                if alias not in device_info[3] and source in device_info[3]:
+                    device_info[3][alias] = device_info[3][source]
             for k in device_info[3]:
                 info = device_info[0][device_info[3][k]]
                 if info:
