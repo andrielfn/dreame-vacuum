@@ -2865,6 +2865,10 @@ class DreameVacuumDeviceCapability:
 
     def load(self, device_info):
         model = self._device.info.model[(self._device.info.model.rfind(".") + 1) :]
+        # Alias unlisted X50 SKU variants to known-equivalent entries
+        for alias, source in {"r9446j": "r9446k"}.items():
+            if alias not in device_info[3] and source in device_info[3]:
+                device_info[3][alias] = device_info[3][source]
         if model not in device_info[3]:
             raise Exception("Unsupported Device!")
         device = device_info[0][device_info[3][model]]
